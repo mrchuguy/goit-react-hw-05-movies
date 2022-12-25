@@ -33,7 +33,7 @@ const Cast = () => {
       <div>
         {isLoading && <p>Loading...</p>}
         {error !== null && <p>{error}</p>}
-        {cast.length > 0 ? (
+        {cast.length > 0 && (
           <ul>
             {cast.map(castItem => (
               <li key={castItem.id}>
@@ -48,8 +48,9 @@ const Cast = () => {
               </li>
             ))}
           </ul>
-        ) : (
-          <p>We don't have any reviews for this movie.</p>
+        )}
+        {cast.length === 0 && !isLoading && (
+          <p>We don't have any cast for this movie.</p>
         )}
       </div>
     </>

@@ -1,13 +1,15 @@
 import axios from 'axios';
+import SearchForm from 'components/SearchForm';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 
 const Movies = () => {
   const [error, setError] = useState(null);
   const [searchMovies, setSearchMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [query, setQuery] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get('query') ?? '';
   const location = useLocation();
 
   useEffect(() => {
@@ -32,17 +34,13 @@ const Movies = () => {
     }
   }, [query]);
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    setQuery(e.target.elements.query.value);
-    e.target.reset();
+  const changeSearchParams = value => {
+    setSearchParams({ query: value });
   };
+
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="query" />
-        <button>Search</button>
-      </form>
+      <SearchForm onSubmit={changeSearchParams} />
       {isLoading && <p>Loading...</p>}
       {error !== null && <p>{error}</p>}
       {searchMovies.length > 0 && (

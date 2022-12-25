@@ -32,16 +32,17 @@ const Reviews = () => {
     <div>
       {isLoading && <p>Loading...</p>}
       {error !== null && <p>{error}</p>}
-      {reviews.length > 0 ? (
+      {reviews.length > 0 && (
         <ul>
           {reviews.map(review => (
-            <li>
+            <li key={review.id}>
               <b>Author: {review.author}</b>
               <p>{review.content}</p>
             </li>
           ))}
         </ul>
-      ) : (
+      )}
+      {reviews.length === 0 && !isLoading && (
         <p>We don't have any reviews for this movie.</p>
       )}
     </div>

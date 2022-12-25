@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Suspense, useRef } from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
@@ -9,8 +10,9 @@ const MovieDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { movieId } = useParams();
   const location = useLocation();
-  const backLinkHref = location.state?.from ?? '/';
-  console.log(location);
+  const refLocation = useRef(location.state?.from);
+  const backLinkHref = refLocation.current ?? '/';
+
   useEffect(() => {
     const fetchMovieById = async () => {
       setIsLoading(true);
@@ -64,14 +66,20 @@ const MovieDetails = () => {
             <h3>Additional information</h3>
             <ul>
               <li>
-                <Link to="Cast">Cast</Link>
+                <Link to="Cast" state={{ from: location }}>
+                  Cast
+                </Link>
               </li>
               <li>
-                <Link to="Reviews">Reviews</Link>
+                <Link to="Reviews" state={{ from: location }}>
+                  Reviews
+                </Link>
               </li>
             </ul>
           </div>
-          <Outlet />
+          <Suspense fallback={<div>Loading subpage...</div>}>
+            <Outlet />
+          </Suspense>
         </>
       )}
     </>
